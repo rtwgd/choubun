@@ -1,0 +1,12 @@
+# Gitignore
+process_problems.py
+typing_practice_texts (1).md
+参考.html
+.gemini/
+.idea/
+.vsc/
+node_modules/
+*.webp
+*.png
+*.jpg
+*.jpeg

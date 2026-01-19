@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語ワープロ検定 速度練習</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>日本語ワープロ検定 速度練習</h1>
+            <p>accuracy. speed. perfection.</p>
+        </header>
+
+        <section class="controls">
+            <div class="control-group">
+                <button id="start-btn" class="btn-primary">スタート</button>
+                <button id="finish-btn" class="btn-danger" disabled>終了</button>
+            </div>
+            <div class="control-group">
+                <div id="timer" class="timer">10:00</div>
+                <button id="reset-btn" class="btn-secondary">リセット</button>
+            </div>
+        </section>
+
+        <main class="main-content">
+            <div class="problem-box">
+                <div class="problem-header">課題文</div>
+                <div id="problem-text">問題を選択してスタートボタンを押してください。</div>
+            </div>
+            <div class="input-box">
+                <div class="input-header">
+                    <span>入力エリア</span>
+                    <span id="char-count">文字数: 0</span>
+                </div>
+                <textarea id="input-area" placeholder="ここに課題文を入力してください..." disabled></textarea>
+            </div>
+        </main>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content">
+            <h2>結果発表</h2>
+            <div id="result-details">
+                <!-- Details injected by JS -->
+            </div>
+            <button id="close-modal" class="btn-primary">閉じる</button>
+        </div>
+    </div>
+
+    <footer class="shortcuts-help">
+        <small>ショートカット: [Space] スタート / [Shift + Space] 終了 / [Esc] リセット</small>
+    </footer>
+
+    <script src="problems.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
