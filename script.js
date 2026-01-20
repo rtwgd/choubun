@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultModal = document.getElementById('result-modal');
     const resultDetails = document.getElementById('result-details');
     const closeModalBtn = document.getElementById('close-modal');
+    const showGradesBtn = document.getElementById('show-grades-btn');
+    const gradingModal = document.getElementById('grading-modal');
+    const closeGradingModalBtn = document.getElementById('close-grading-modal');
 
     // Load problems not needed as we pick random on start
 
@@ -295,54 +298,74 @@ document.addEventListener('DOMContentLoaded', () => {
         //    Prefix "ABCDE": Dist("ACD", "ABCDE") -> 2 (B del, E del).
         //    So the Min of the last row gives us the best fit "Error Count".
 
-        const rawCount = inputText.replace(/[\n\s]/g, '').length; // Official count might ignore spaces/newlines?
-        // Standard Japanese WP test counts ALL keystrokes including punctuation/spaces? 
-        // Usually "Character Count" includes punctuation. Newlines? Maybe.
-        // Let's stick to `inputText.length` but maybe trim trailing newline.
-        const charCount = inputText.length;
+        const rawCount = inputText.length;
+        const timeSpent = 600 - timeLeft; // seconds
+        const paceMultiplier = timeSpent > 0 ? (600 / timeSpent) : 0;
 
         const errorData = calculateDetailedErrors(inputText, currentProblem.text);
         const errorCount = errorData.distance;
 
-        // Calculate penalty
-        // Logic:
-        // If raw >= 800, use -5?
-        // In reality, you apply the rule for the CLASS you are aiming for.
-        // But here we auto-detect class.
-        // So we calculate Net Score for each tier and see which is highest?
-        // No, that's not how it works.
-        // Usually: "If you want 1st Dan, you need 800 chars. If you have errors, we deduct 5 each."
-        // If (800 - 5*err) >= 800? No.
-        // Pass condition: (Count - Penalty) >= Required.
+        // Calculate 10-min equivalent data
+        const estCharCount = Math.round(rawCount * paceMultiplier);
+        const estErrorCount = Math.round(errorCount * paceMultiplier);
 
-        // Let's calculate "Potential Grade"
-        // Try Tier 1 (Shodan/1st/Pre-1): Multiplier 5.
-        const net1 = charCount - (errorCount * 5);
-
-        // Try Tier 2 (2nd/Pre-2): Multiplier 3.
-        const net2 = charCount - (errorCount * 3);
-
-        // Try Tier 3 (3rd/4th): Multiplier 1.
-        const net3 = charCount - (errorCount * 1);
-
+        // Grade calculation based on ESTIMATED scores
+        // We evaluate from top to bottom based on the multiplier tiers.
         let grade = "不合格";
         let finalNet = 0;
 
-        // Check from top down
-        if (net1 >= 800) { grade = "初段"; finalNet = net1; }
-        else if (net1 >= 700) { grade = "1級"; finalNet = net1; }
-        else if (net1 >= 600) { grade = "準1級"; finalNet = net1; }
-        else if (net2 >= 500) { grade = "2級"; finalNet = net2; }
-        else if (net2 >= 400) { grade = "準2級"; finalNet = net2; }
-        else if (net3 >= 300) { grade = "3級"; finalNet = net3; }
-        else if (net3 >= 200) { grade = "4級"; finalNet = net3; }
-        else { finalNet = net3; } // Fallback
+        // Tiers for Grading:
+        // Tier 1 (Dan & 1st/Pre-1st): 800+ (or lower for Pre-1st), -5 penalty
+        // Tier 2 (2nd/Pre-2nd): 400-599 range, -3 penalty
+        // Tier 3 (3rd/4th): 200-399 range, -1 penalty
+
+        const netTier1 = estCharCount - (estErrorCount * 5);
+        const netTier2 = estCharCount - (estErrorCount * 3);
+        const netTier3 = estCharCount - (estErrorCount * 1);
+
+        if (netTier1 >= 600) {
+            finalNet = netTier1;
+            if (netTier1 >= 3000) grade = "十段";
+            else if (netTier1 >= 2750) grade = "九段";
+            else if (netTier1 >= 2500) grade = "八段";
+            else if (netTier1 >= 2250) grade = "七段";
+            else if (netTier1 >= 2000) grade = "六段";
+            else if (netTier1 >= 1750) grade = "五段";
+            else if (netTier1 >= 1500) grade = "四段";
+            else if (netTier1 >= 1250) grade = "三段";
+            else if (netTier1 >= 1000) grade = "二段";
+            else if (netTier1 >= 800) grade = "初段";
+            else if (netTier1 >= 700) grade = "1級";
+            else grade = "準1級";
+        } else if (netTier2 >= 400) {
+            finalNet = netTier2;
+            if (netTier2 >= 500) grade = "2級";
+            else grade = "準2級";
+        } else if (netTier3 >= 200) {
+            finalNet = netTier3;
+            if (netTier3 >= 300) grade = "3級";
+            else grade = "4級";
+        } else {
+            finalNet = netTier3;
+            grade = "不合格";
+        }
 
         // Result Display
         let message = `
-            <p><span>総文字数</span> <span>${charCount} 文字</span></p>
-            <p><span>ミス数</span> <span>${errorCount} 箇所</span></p>
-            <p><span>判定級</span> <span style="font-size: 1.5em;">${grade}</span></p>
+            <div class="result-summary">
+                <p><span>実入力文字数</span> <span>${rawCount} 文字</span></p>
+                <p><span>経過時間</span> <span>${formatTime(timeSpent)} / 10:00</span></p>
+                <p><span>ミス数</span> <span>${errorCount} 箇所</span></p>
+            </div>
+            
+            <div class="result-estimation" style="background: rgba(255,100,100,0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid rgba(255,100,100,0.2);">
+                <div style="font-weight: bold; margin-bottom: 10px; color: #ff6b6b; font-size: 0.9em;">10分間換算データ（級判定用）</div>
+                <p style="display:flex; justify-content:space-between; margin: 5px 0;"><span>予測文字数</span> <span>${estCharCount} 文字</span></p>
+                <p style="display:flex; justify-content:space-between; margin: 5px 0;"><span>予測ミス数</span> <span>${estErrorCount} 箇所</span></p>
+                <p style="display:flex; justify-content:space-between; margin: 5px 0; font-weight: bold;"><span>正味得点</span> <span>${finalNet} 点</span></p>
+            </div>
+
+            <p><span>判定級</span> <span style="font-size: 1.8em; color: #ff6b6b; font-weight: bold; display: block; margin-top: 10px;">${grade}</span></p>
             
             <div class="input-header" style="margin-top:20px;">詳細フィードバック (赤字: ミス / [抜]: 脱字)</div>
             <div class="error-report">
@@ -457,6 +480,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeModalBtn.addEventListener('click', () => {
         resultModal.style.display = 'none';
+    });
+
+    showGradesBtn.addEventListener('click', () => {
+        gradingModal.style.display = 'flex';
+    });
+
+    closeGradingModalBtn.addEventListener('click', () => {
+        gradingModal.style.display = 'none';
     });
 
     // Keyboard Shortcuts
