@@ -16,7 +16,7 @@
     <div class="container">
         <header>
             <h1>日本語ワープロ検定 速度練習</h1>
-            <p></p>
+            <p>accuracy. speed. perfection.</p>
         </header>
 
         <section class="controls">
@@ -27,13 +27,14 @@
             <div class="control-group">
                 <div id="timer" class="timer">10:00</div>
                 <button id="reset-btn" class="btn-secondary">リセット</button>
+                <button id="show-grades-btn" class="btn-info">判定基準一覧</button>
             </div>
         </section>
 
         <main class="main-content">
             <div class="problem-box">
                 <div class="problem-header">課題文</div>
-                <div id="problem-text">スタートボタンを押してください。</div>
+                <div id="problem-text">問題を選択してスタートボタンを押してください。</div>
             </div>
             <div class="input-box">
                 <div class="input-header">
@@ -53,6 +54,124 @@
                 <!-- Details injected by JS -->
             </div>
             <button id="close-modal" class="btn-primary">閉じる</button>
+        </div>
+    </div>
+
+    <!-- Grading Modal -->
+    <div id="grading-modal" class="modal">
+        <div class="modal-content grading-table-container">
+            <h2>判定基準一覧</h2>
+            <div class="grading-tables">
+                <div class="grading-section">
+                    <h3>🏆 公式級 (日本語ワープロ検定)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>級</th>
+                                <th>基準文字数</th>
+                                <th>ミス減点</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>初段</td>
+                                <td>800~</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>1級</td>
+                                <td>700~799</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>準1級</td>
+                                <td>600~699</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>2級</td>
+                                <td>500~599</td>
+                                <td>-3</td>
+                            </tr>
+                            <tr>
+                                <td>準2級</td>
+                                <td>400~499</td>
+                                <td>-3</td>
+                            </tr>
+                            <tr>
+                                <td>3級</td>
+                                <td>300~399</td>
+                                <td>-1</td>
+                            </tr>
+                            <tr>
+                                <td>4級</td>
+                                <td>200~299</td>
+                                <td>-1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grading-section custom-ranks">
+                    <h3>⭐ 独自段位 (Antigravity版)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>段位</th>
+                                <th>基準文字数</th>
+                                <th>ミス減点</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="high-rank">
+                                <td>十段</td>
+                                <td>3000~</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr class="high-rank">
+                                <td>九段</td>
+                                <td>2750~2999</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>八段</td>
+                                <td>2500~2749</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>七段</td>
+                                <td>2250~2499</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>六段</td>
+                                <td>2000~2249</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>五段</td>
+                                <td>1750~1999</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>四段</td>
+                                <td>1500~1749</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>三段</td>
+                                <td>1250~1499</td>
+                                <td>-5</td>
+                            </tr>
+                            <tr>
+                                <td>二段</td>
+                                <td>1000~1249</td>
+                                <td>-5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button id="close-grading-modal" class="btn-primary" style="margin-top:20px;">閉じる</button>
         </div>
     </div>
 
