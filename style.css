@@ -117,8 +117,18 @@ button:hover {
 
 .main-content {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 25px;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
 }
 
 .problem-box,
@@ -126,6 +136,25 @@ button:hover {
     background: var(--sub-alt-color);
     padding: 25px;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+#problem-text,
+textarea {
+    height: 450px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    user-select: none;
+    overflow-y: auto;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    color: var(--text-color);
+    resize: none;
+    font-family: inherit;
+    outline: none;
 }
 
 .problem-header,
@@ -136,19 +165,6 @@ button:hover {
     margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-#problem-text {
-    font-size: 1.4rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    user-select: none;
-    height: 350px;
-    overflow-y: auto;
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    color: var(--text-color);
 }
 
 /* Custom scrollbar */
@@ -168,28 +184,84 @@ textarea::-webkit-scrollbar-thumb {
     border-radius: 4px;
 }
 
-.input-box {
-    display: flex;
-    flex-direction: column;
+/* Grading Table Styles */
+.btn-info {
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
 }
 
-.input-header {
-    display: flex;
-    justify-content: space-between;
+.btn-info:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
 }
 
-textarea {
-    width: 100%;
-    height: 350px;
-    padding: 0;
-    border: none;
-    background-color: transparent;
+.grading-table-container {
+    max-width: 900px;
+    padding: 40px;
+}
+
+.grading-tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.grading-section h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
     color: var(--text-color);
-    font-size: 1.4rem;
-    line-height: 1.6;
-    resize: none;
-    font-family: inherit;
-    outline: none;
+    font-weight: 400;
+}
+
+.grading-section table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.grading-section th,
+.grading-section td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--sub-color);
+    color: var(--sub-color);
+}
+
+.grading-section th {
+    text-align: left;
+    color: var(--text-color);
+    font-weight: 600;
+    border-bottom: 2px solid var(--main-color);
+}
+
+.grading-section td:first-child {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.custom-ranks {
+    background: rgba(226, 183, 20, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.custom-ranks h3 {
+    color: var(--main-color);
+}
+
+.high-rank {
+    background: rgba(226, 183, 20, 0.1);
+}
+
+.high-rank td {
+    color: var(--main-color) !important;
+}
+
+@media (max-width: 700px) {
+    .grading-tables {
+        grid-template-columns: 1fr;
+    }
 }
 
 textarea:disabled {
