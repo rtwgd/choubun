@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = 600; // 10 minutes in seconds
     let isRunning = false;
 
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
     function formatTime(seconds) {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
